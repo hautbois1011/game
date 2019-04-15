@@ -38,7 +38,7 @@ int main(void)
             unsigned int damage = player.CalculateGivingDamage();
             cout << "Your Giving Damage: " << damage << endl;
             unsigned int enemiesgiven = enemy.CalculateGivenDamage(damage);
-            cout << "Enemie's given damage: " << enemiesgiven << endl;
+            cout << "Enemie's given damage: " << enemiesgiven << endl << endl;
             enemy.addHP(-enemiesgiven);
             enemy.ShowStatus();
 
@@ -46,7 +46,7 @@ int main(void)
             unsigned int given = enemy.CalculateGivingDamage();
             cout << "Enemie's giving damage: " << given << endl;
             unsigned int playersgiven = player.CalculateGivenDamage(given);
-            cout << "Your Given Damage: " << playersgiven << endl;
+            cout << "Your Given Damage: " << playersgiven << endl << endl;
             player.addHP(-playersgiven);
             player.ShowStatus();
         }

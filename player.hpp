@@ -66,13 +66,14 @@ public:
         cout << "VIT: " << VIT_ << endl;
         cout << "SPD: " << SPD_ << endl;
         cout << "FRT: " << FRT_ << endl;
-        cout << "WEIGHT: " << WEIGHT_ << "/" << MAX_WEIGHT_ << endl;
+        cout << "WEIGHT: " << WEIGHT_ << "/" << MAX_WEIGHT_ << endl << endl;
     }
 
     void addHP(int HP)
     {
         HP_ += HP;
-        if(HP_ > MAXHP_)
+        cout << HP_ << endl;
+        if(HP_ > (int)MAXHP_)
             HP_ = MAXHP_;
         if(HP_ < 0)
             HP_ = 0;
@@ -94,7 +95,7 @@ public:
     unsigned int CalculateGivingDamage()
     {
         unsigned int damage = STR_/10;
-        unsigned hit = 50 + DEX_/2 + SPD_/5;
+        unsigned hit = 50 + DEX_/2 + SPD_/5 - 20*(MAXHP_ - HP_)/MAXHP_;
 
         for(auto it = weapons_.begin(); it != weapons_.end(); it++)
         {
@@ -131,13 +132,18 @@ public:
             }
         }
 
+        damage -= damage*(MAXHP_ - HP_)/(MAXHP_ * 5);
+
         return damage;
     }
 
     unsigned int CalculateGivenDamage(unsigned int given)
     {
         unsigned int damage = given;
-        damage -= VIT_/2;
+        if(VIT_/2 < given)
+            damage -= VIT_/2;
+        else
+            damage = 0;
 
         damage *= (100 - EDR_/5);
         damage /= 100;
