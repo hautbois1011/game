@@ -6,7 +6,13 @@ using namespace std;
 
 int main(void)
 {
-    Player player = Player();
+    Player player = Player("Player", 10);
+    player.ShowStatus();
+
+    Player enemy = Player("Enemy");
+    enemy.EquipWeapon(0);
+    enemy.ShowStatus();
+    
     while(true)
     {
         cout << "What to do?(0:Equip some weapon 1:Battle)" << endl;
@@ -28,15 +34,21 @@ int main(void)
         }
         else if(d == 1)
         {
-            unsigned int damage = player.CalculatePlayerGivingDamage();
-            cout << "Giving Damage: " << damage << endl;
+            cout << "[Your turn]" << endl;
+            unsigned int damage = player.CalculateGivingDamage();
+            cout << "Your Giving Damage: " << damage << endl;
+            unsigned int enemiesgiven = enemy.CalculateGivenDamage(damage);
+            cout << "Enemie's given damage: " << enemiesgiven << endl;
+            enemy.addHP(-enemiesgiven);
+            enemy.ShowStatus();
 
-            unsigned int given;
-            cout << "Input given damage: ";
-            cin >> given;
-
-            damage = player.CalculatePlayerGivenDamage(given);
-            cout << "Given Damage: " << damage << endl;
+            cout << "[Enemie's turn]" << endl;
+            unsigned int given = enemy.CalculateGivingDamage();
+            cout << "Enemie's giving damage: " << given << endl;
+            unsigned int playersgiven = player.CalculateGivenDamage(given);
+            cout << "Your Given Damage: " << playersgiven << endl;
+            player.addHP(-playersgiven);
+            player.ShowStatus();
         }
 
         cout << "Exit? (Y/N)" << endl;

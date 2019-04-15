@@ -2,7 +2,7 @@
 #define PLAYER_HPP
 
 #include <iostream>
-#include <algorithm>
+#include <cmath>
 using namespace std;
 
 #include "equipment.hpp"
@@ -10,8 +10,10 @@ using namespace std;
 class Player
 {
 private:
+    string name_;
+
     unsigned int LV_;
-    unsigned int HP_;
+    int HP_;
     unsigned int MAXHP_;
     unsigned int MP_;
     unsigned int MAXMP_;
@@ -29,27 +31,51 @@ private:
     vector<Weapon> weapons_;
 
 public:
-    Player()
+    Player(string name, unsigned int LV=1)
     {
-        LV_ = 1;
-        HP_ = 20;
-        MAXHP_ = 100;
-        MP_ = 20;
-        MAXMP_ = 100;
-        STR_ = 10;
-        EDR_ = 10;
-        DEX_ = 10;
-        VIT_ = 10;
-        SPD_ = 10;
+        name_ = name;
+        LV_ = LV;
+        MAXHP_ = MAXHP(LV);
+        HP_ = MAXHP_;
+        MAXMP_ = MAXMP(LV);
+        MP_ = MAXMP_;
+        STR_ = STR(LV);
+        EDR_ = EDR(LV);
+        DEX_ = DEX(LV);
+        VIT_ = VIT(LV);
+        SPD_ = SPD(LV);
         FRT_ = 5;
         WEIGHT_ = 0;
-        MAX_WEIGHT_ = 20;
+        MAX_WEIGHT_ = MAX_WEIGHT(LV);
 
         weapons_ = vector<Weapon>();
     }
 
     ~Player()
     {
+    }
+
+    void ShowStatus()
+    {
+        cout << "[" << name_ << "]" << endl;
+        cout << "HP: " << HP_ << "/" << MAXHP_ << endl;
+        cout << "MP: " << MP_ << "/" << MAXMP_ << endl;
+        cout << "STR: " << STR_ << endl;
+        cout << "EDR: " << EDR_ << endl;
+        cout << "DEX: " << DEX_ << endl;
+        cout << "VIT: " << VIT_ << endl;
+        cout << "SPD: " << SPD_ << endl;
+        cout << "FRT: " << FRT_ << endl;
+        cout << "WEIGHT: " << WEIGHT_ << "/" << MAX_WEIGHT_ << endl;
+    }
+
+    void addHP(int HP)
+    {
+        HP_ += HP;
+        if(HP_ > MAXHP_)
+            HP_ = MAXHP_;
+        if(HP_ < 0)
+            HP_ = 0;
     }
 
     void EquipWeapon(unsigned int id)
@@ -65,7 +91,7 @@ public:
         weapons_.push_back(Weapon(id));
     }
 
-    unsigned int CalculatePlayerGivingDamage()
+    unsigned int CalculateGivingDamage()
     {
         unsigned int damage = STR_/10;
         unsigned hit = 50 + DEX_/2 + SPD_/5;
@@ -108,7 +134,7 @@ public:
         return damage;
     }
 
-    unsigned int CalculatePlayerGivenDamage(unsigned int given)
+    unsigned int CalculateGivenDamage(unsigned int given)
     {
         unsigned int damage = given;
         damage -= VIT_/2;
@@ -156,6 +182,40 @@ public:
         }
 
         return damage;
+    }
+
+private:
+    unsigned int MAXHP(unsigned int LV)
+    {
+        return 100 + ceil(10*sqrt(LV - 1));
+    }
+    unsigned int MAXMP(unsigned int LV)
+    {
+        return 100;
+    }
+    unsigned int STR(unsigned int LV)
+    {
+        return 10 + LV/10;
+    }
+    unsigned int EDR(unsigned int LV)
+    {
+        return 10 + LV/10;
+    }
+    unsigned int DEX(unsigned int LV)
+    {
+        return 10 + LV/5;
+    }
+    unsigned int VIT(unsigned int LV)
+    {
+        return 10 + LV/5;
+    }
+    unsigned int SPD(unsigned int LV)
+    {
+        return 10 + LV/5;
+    }
+    unsigned int MAX_WEIGHT(unsigned int LV)
+    {
+        return 20 + LV;
     }
 };
 
